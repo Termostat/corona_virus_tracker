@@ -31,5 +31,5 @@ public class LocationStats {
 	public void setLatestTotalCases(int latestTotalCases) {
 		this.latestTotalCases = latestTotalCases;
 	}
-			
+		
 }

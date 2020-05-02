@@ -40,6 +40,8 @@ public class CoronaVirusDataService {
 		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(VIRUS_DATA_URL)).build();
 		
 		HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+
 		
 //  Apache Commons CSV
 		StringReader csvBodyReader = new StringReader(httpResponse.body());
@@ -47,13 +49,13 @@ public class CoronaVirusDataService {
 		List<LocationStats> newStats = new ArrayList<LocationStats>(); 
 		for (CSVRecord record : records) {
 			LocationStats locationStat = new LocationStats();
+			int latestTotalCases = Integer.parseInt(record.get(record.size()-1));
+			int previousRecord = Integer.parseInt(record.get(record.size()-2));
 		    locationStat.setState(record.get("Province/State"));
 		    locationStat.setCountry(record.get("Country/Region"));
-		    int latestCases = Integer.parseInt(record.get(record.size()-1));
-		    int prevDayCases = Integer.parseInt(record.get(record.size()-2));
-		    locationStat.setLatestTotalCases(latestCases);
-		    locationStat.setDiffFromPrevDay(latestCases - prevDayCases);
-		    
+		    locationStat.setLatestTotalCases(latestTotalCases);
+		    locationStat.setDiffFromPrevDay(latestTotalCases - previousRecord);
+
 		    newStats.add(locationStat);
 		}
 		
